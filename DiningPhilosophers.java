@@ -1,28 +1,28 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package DiningPhilosophers;
 
-/**
- *
- * @author AbdallaEssam
- */
 public class DiningPhilosophers {
 
     public static void main(String args[]) {
-        DiningServer server = new DiningServerImpl();
 
-        Philosopher[] philosopherArray = new Philosopher[DiningServerImpl.NUM_OF_PHILS];
+        Philosopher p1 = new Philosopher(0); 
+        Thread t1 = new Thread(p1); 
 
-        // create the philosopher threads
-        for (int i = 0; i < DiningServerImpl.NUM_OF_PHILS; i++) {
-            philosopherArray[i] = new Philosopher(server, i);
-        }
+        Philosopher p2 = new Philosopher(1); 
+        Thread t2 = new Thread(p2); 
 
-        for (int i = 0; i < DiningServerImpl.NUM_OF_PHILS; i++) {
-            new Thread(philosopherArray[i]).start();
-        }
+        Philosopher p3 = new Philosopher(2); 
+        Thread t3 = new Thread(p3); 
+
+        Philosopher p4 = new Philosopher(3); 
+        Thread t4 = new Thread(p4);
+
+        Philosopher p5 = new Philosopher(4); 
+        Thread t5 = new Thread(p5); 
+
+        t1.start(); 
+        t2.start(); 
+        t3.start(); 
+        t4.start(); 
+        t5.start(); 
     }
 }
