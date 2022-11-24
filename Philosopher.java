@@ -1,49 +1,66 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package DiningPhilosophers;
 
-/**
- *
- * @author AbdallaEssam
- */
+import java.util.concurrent.*; 
+import java.util.logging.Level; 
+import java.util.logging.Logger; 
+
 public class Philosopher implements Runnable{
 
-    private DiningServer server;
-    private int philNum;
+    private int id; 
+    Semaphore mutex = new Semaphore(1); 
+    SleepUtilities S = new SleepUtilities(); 
+    
+    Philosopher(int id){ 
+        this.id = id; 
+    } 
 
-    public Philosopher(DiningServer server, int philNum) {
-        this.server = server;
-        this.philNum = philNum;
-    }
+    private void eat(){ 
+        S.takeNap(); 
+    } 
 
-    private void thinking() {
-        SleepUtilities.nap();
-    }
+    private void think(){ 
+        S.takeNap(); 
+    } 
 
-    private void eating() {
-        SleepUtilities.nap();
-    }
+     public void Sleep(){ 
+        System.out.println("Philosopher " + (id+1) + " will take a nap for 5 seconds"); 
+        S.takeNap(); 
+    } 
 
     // philosophers alternate between thinking and eating
     public void run() {
-        while (true) {
-            System.out.println("philosopher " + philNum + " is thinking.");
-            thinking();
+        while(true){ 
+            try { 
+                mutex.acquire(); 
+            }catch (InterruptedException ex) { 
+                Logger.getLogger(Philosopher.class.getName()).log(Level.SEVERE, null,ex);
+            } 
+            
+            // Pick up the forks
+            takeForks(id);  
 
-            System.out.println("philosopher " + philNum + " is hungry.");
+            mutex.release(); 
 
-            server.takeForks(philNum);
+            eat();        
 
-            System.out.println("philosopher " + philNum + " is eating.");
+           try { 
+                mutex.acquire(); 
+            } catch (InterruptedException ex) { 
+                Logger.getLogger(Philosopher.class.getName()).log(Level.SEVERE, null, ex);
+           } 
+            
+            // put Down the forks
+            returnForks(id);                       
 
-            eating();
+            mutex.release(); 
 
-            System.out.println("philosopher " + philNum + " is done eating.");
+            think();                                   
 
-            server.returnForks(philNum);
-        }
-    }
+            Sleep();  
+
+            System.out.println("Philosopher " + (id+1) + " finish his nap"); 
+       } 
+
+    }  
+  
 }
