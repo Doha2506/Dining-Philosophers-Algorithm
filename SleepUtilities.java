@@ -1,24 +1,16 @@
 package DiningPhilosophers;
 
+import java.util.logging.Level; 
+import java.util.logging.Logger; 
+
 public class SleepUtilities {
-
-    private static final int NAP_TIME = 5;
-
-    /**
-     * Nap between zero and NAP_TIME seconds.
-     */
-    public static void nap() {
-        nap(NAP_TIME);
+    
+    public void takeNap(){ 
+        try { 
+            Thread.sleep(5000); 
+        } catch (InterruptedException ex) { 
+            Logger.getLogger(SleepUtilities.class.getName()).log(Level.SEVERE, null, ex); 
+        } 
     }
-
-    /**
-     * Nap between zero and duration seconds.
-     */
-    public static void nap(int duration) {
-        int sleeptime = (int) (NAP_TIME * Math.random());
-        try {
-            Thread.sleep(sleeptime * 1000);
-        } catch (InterruptedException e) {
-        }
-    }
+    
 }
